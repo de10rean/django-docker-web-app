@@ -1,0 +1,15 @@
+Django==2.0.5
+channels==2.1.1
+channels-redis==2.2.1
+django-cors-headers==2.2.0
+django-redis==4.9.0
+djangorestframework==3.8.2
+Pillow==5.1.0
+psycopg2-binary==2.7.4
+pytz==2018.4
+redis==2.10.6
+celery==4.1.1
+requests==2.18.4
+django-modeltrans==0.2.2
+coreapi==2.3.3
+drf-compound-fields==1.0.0

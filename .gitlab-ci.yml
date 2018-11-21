@@ -1,0 +1,32 @@
+image: docker:latest
+
+variables:
+  NGINX_CONTAINER_IMAGE: $CI_REGISTRY_IMAGE/nginx
+  POSTGRES_CONTAINER_IMAGE: $CI_REGISTRY_IMAGE/postgres
+  CONTAINER_IMAGE: $CI_REGISTRY_IMAGE
+
+services:
+  - docker:dind
+
+stages:
+  - build
+
+before_script:
+  - docker login -u $CI_REGISTRY_USER -p $CI_BUILD_TOKEN $CI_REGISTRY
+
+.build: &build
+  stage: build
+  script:
+    - docker build -t $CONTAINER_IMAGE -f ./compose/app/Dockerfile .
+    - docker push $CONTAINER_IMAGE
+    - docker build -t $NGINX_CONTAINER_IMAGE -f ./compose/nginx/Dockerfile .
+    - docker push $NGINX_CONTAINER_IMAGE
+    - docker build -t $POSTGRES_CONTAINER_IMAGE -f ./compose/postgres/Dockerfile .
+    - docker push $POSTGRES_CONTAINER_IMAGE
+build:
+  variables:
+    CONTAINER_IMAGE: $CI_REGISTRY_IMAGE
+  <<: *build
+  only:
+    - master
+
